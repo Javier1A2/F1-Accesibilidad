@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fórmula 1 - Noticias y Temporada</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header role="banner">
+        <h1>Fórmula 1 - Noticias y Temporada</h1>
+        <p>Últimas noticias, resultados y datos de la máxima categoría del automovilismo.</p>
+    </header>
+
+    <!-- NAVIGATION -->
+    <nav role="navigation" aria-label="Navegación principal">
+        <ul>
+            <li><a href="#pilotos" aria-label="Ir a Pilotos">Pilotos</a></li>
+            <li><a href="#equipos" aria-label="Ir a Equipos">Equipos</a></li>
+            <li><a href="#calendario" aria-label="Ir a Calendario">Calendario</a></li>
+            <li><a href="https://www.formula1.com/" target="_blank" rel="noopener noreferrer" aria-label="Sitio oficial de la Formula 1 (se abre en nueva pestaña)">Sitio oficial</a></li>
+        </ul>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main id="main-content" role="main">
+        <!-- SECTION: IMAGES -->
+        <section id="pilotos" class="seccion" aria-labelledby="h-pilotos">
+            <h2 id="h-pilotos">Pilotos destacados</h2>
+            <div class="galeria">
+                <figure>
+                    <img src="https://www.timesmonaco.com/wp-content/uploads/2023/05/Max-Verstappen-Red-Bull-2023-F1-scaled-1-1600x1280.jpg" alt="Max Verstappen">
+                    <figcaption>Max Verstappen</figcaption>
+                </figure>
+                <figure>
+                    <img src="https://www.big14news.com/wp-content/uploads/2025/10/Lewis_Hamilton_Lewis_Hamilton_Ferrari_qualifying.webp" alt="Lewis Hamilton">
+                    <figcaption>Lewis Hamilton</figcaption>
+                </figure>
+                <figure>
+                    <img src="https://i.pinimg.com/originals/ce/1d/62/ce1d626c49b0018820bcc96fcc63f709.jpg" alt="Charles Leclerc">
+                    <figcaption>Charles Leclerc</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <!-- SECTION: TABLE -->
+        <section id="calendario" class="seccion" aria-labelledby="h-calendario">
+            <h2 id="h-calendario">Clasificación de pilotos (ejemplo)</h2>
+            <div class="table-wrapper">
+            <table class="styled-table" role="table" aria-describedby="tabla-desc" aria-label="Clasificación de pilotos">
+                <caption id="tabla-desc">Pilotos y puntos (ejemplo)</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Pos.</th>
+                        <th scope="col">Piloto</th>
+                        <th scope="col">Equipo</th>
+                        <th scope="col">Puntos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Max Verstappen</td>
+                        <td>Red Bull Racing</td>
+                        <td>454</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Oscar Piastri</td>
+                        <td>McLaren</td>
+                        <td>387</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Charles Leclerc</td>
+                        <td>Ferrari</td>
+                        <td>320</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </section>
+
+        <!-- SECTION: FORM -->
+        <section id="formulario" class="seccion" aria-labelledby="h-formulario">
+            <h2 id="h-formulario">Suscríbete a noticias y alertas</h2>
+            <form action="#" method="post" aria-describedby="form-desc">
+                <p id="form-desc">Recibe noticias, resultados y alertas sobre la temporada de F1.</p>
+
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+
+                <label for="email">Correo electrónico:</label>
+                <input type="email" id="email" name="email" placeholder="tu@correo.com" required>
+
+                <label for="interes">Interés:</label>
+                <select id="interes" name="interes">
+                    <option value="resultados">Resultados y clasificaciones</option>
+                    <option value="noticias">Noticias y rumores</option>
+                    <option value="estadisticas">Estadísticas y análisis</option>
+                </select>
+
+                <button type="submit" title="Suscribirse" aria-label="Suscribirse a noticias de Fórmula 1">Suscribirse</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer role="contentinfo">
+        <p>&copy; 2025 - Sitio fan de la F1 | Fuentes: <a href="https://www.formula1.com/" target="_blank" rel="noopener noreferrer">formula1.com</a></p>
+    </footer>
+</body>
+</html>
