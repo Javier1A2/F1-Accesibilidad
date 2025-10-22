@@ -104,6 +104,23 @@
                         <option value="noticias">Noticias y rumores</option>
                         <option value="estadisticas">Estadísticas y análisis</option>
                     </select>
+                    
+                                        <!-- Nuevo: elegir piloto favorito -->
+                                        <fieldset>
+                                            <legend>Elige tu piloto favorito</legend>
+                                            <div>
+                                                <input type="radio" id="piloto-max" name="piloto" value="max">
+                                                <label for="piloto-max">Max Verstappen</label>
+                                            </div>
+                                            <div>
+                                                <input type="radio" id="piloto-piastri" name="piloto" value="piastri">
+                                                <label for="piloto-piastri">Oscar Piastri</label>
+                                            </div>
+                                            <div>
+                                                <input type="radio" id="piloto-leclerc" name="piloto" value="leclerc">
+                                                <label for="piloto-leclerc">Charles Leclerc</label>
+                                            </div>
+                                        </fieldset>
                 </fieldset>
 
                 <div id="form-status" role="status" aria-live="polite" aria-atomic="true" class="visually-hidden" tabindex="-1"></div>
@@ -118,38 +135,82 @@
         <p>&copy; 2025 - Sitio fan de la F1 | Fuentes: <a href="https://www.formula1.com/" target="_blank" rel="noopener noreferrer">formula1.com</a></p>
     </footer>
         <script>
-            (function(){
-                // Manejo accesible del formulario: validación simple y mensajes en aria-live
-                var form = document.querySelector('form');
-                var status = document.getElementById('form-status');
+                (function(){
+                    // Manejo accesible del formulario: validación, mensajes y piloto->equipo
+                    var form = document.querySelector('form');
+                    var status = document.getElementById('form-status');
 
-                function showMessage(message, isError){
-                    status.textContent = message;
-                    // Visually show the status for sighted users
-                    status.classList.remove('visually-hidden');
-                    status.style.padding = '0.5rem';
-                    status.style.background = isError ? '#fff1f0' : '#e8f5e9';
-                    status.style.color = isError ? '#8a1f1f' : '#1b5e20';
-                    // Move focus so screen readers announce it
-                    status.focus();
-                }
-
-                form.addEventListener('submit', function(e){
-                    e.preventDefault();
-                    var nombre = form.nombre.value.trim();
-                    var email = form.email.value.trim();
-                    var missing = [];
-                    if(!nombre) missing.push('nombre');
-                    if(!email) missing.push('correo electrónico');
-                    if(missing.length){
-                        showMessage('Campos obligatorios faltantes: ' + missing.join(', '), true);
-                        return;
+                    function showMessage(message, isError){
+                        status.textContent = message;
+                        status.classList.remove('visually-hidden');
+                        status.style.padding = '0.5rem';
+                        status.style.background = isError ? '#fff1f0' : '#e8f5e9';
+                        status.style.color = isError ? '#8a1f1f' : '#1b5e20';
+                        // Ensure screen readers announce the updated content
+                        status.focus();
                     }
-                    // Simular envío exitoso
-                    showMessage('Gracias por suscribirte. Revisa tu correo para confirmar la suscripción.', false);
-                    form.reset();
-                });
-            })();
+
+                    // Helper: obtener nombre legible del piloto según el value del radio
+                    var pilotNames = {
+                        'max': 'Max Verstappen',
+                        'piastri': 'Oscar Piastri',
+                        'leclerc': 'Charles Leclerc'
+                    };
+
+                    // Leer la tabla de clasificación para obtener el equipo según nombre del piloto
+                    function getTeamFromTable(pilotFullName){
+                        if(!pilotFullName) return null;
+                        var rows = document.querySelectorAll('.styled-table tbody tr');
+                        for(var i=0;i<rows.length;i++){
+                            // cells can include a th for the first column
+                            var cells = rows[i].querySelectorAll('th, td');
+                            var pilotCell = (cells[1] && cells[1].textContent || '').trim();
+                            var teamCell = (cells[2] && cells[2].textContent || '').trim();
+                            if(pilotCell && pilotCell.toLowerCase().indexOf(pilotFullName.toLowerCase().split(' ')[0]) !== -1){
+                                return teamCell;
+                            }
+                        }
+                        return null;
+                    }
+
+                    function buildMessage(nombre, pilotValue){
+                        var pilotFull = pilotNames[pilotValue] || '';
+                        var team = getTeamFromTable(pilotFull) || '';
+                        var parts = [];
+                        if(nombre) parts.push('Felicidades, ' + nombre + '!');
+                        if(pilotFull && team) parts.push('Apoyas a ' + pilotFull + ' del equipo ' + team + '.');
+                        else if(pilotFull) parts.push('Apoyas a ' + pilotFull + '.');
+                        return parts.join(' ');
+                    }
+
+                    // Escuchar cambios en radios para anunciar inmediatamente (incluye nombre si ya fue ingresado)
+                    var radios = form.querySelectorAll('input[name="piloto"]');
+                    radios.forEach(function(r){
+                        r.addEventListener('change', function(){
+                            var nombre = form.nombre.value.trim();
+                            var msg = buildMessage(nombre, r.value);
+                            if(msg) showMessage(msg, false);
+                        });
+                    });
+
+                    form.addEventListener('submit', function(e){
+                        e.preventDefault();
+                        var nombre = form.nombre.value.trim();
+                        var email = form.email.value.trim();
+                        var selected = form.querySelector('input[name="piloto"]:checked');
+                        var missing = [];
+                        if(!nombre) missing.push('nombre');
+                        if(!email) missing.push('correo electrónico');
+                        if(!selected) missing.push('piloto favorito');
+                        if(missing.length){
+                            showMessage('Campos obligatorios faltantes: ' + missing.join(', '), true);
+                            return;
+                        }
+                        var msg = buildMessage(nombre, selected.value);
+                        showMessage('Gracias por suscribirte. ' + msg, false);
+                        form.reset();
+                    });
+                })();
         </script>
 </body>
 </html>
