@@ -7,48 +7,49 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <a class="skip-link" href="#main-content">Saltar al contenido</a>
     <!-- HEADER -->
-    <header role="banner">
+    <header aria-label="header">
         <h1>Fórmula 1 - Noticias y Temporada</h1>
         <p>Últimas noticias, resultados y datos de la máxima categoría del automovilismo.</p>
     </header>
 
     <!-- NAVIGATION -->
-    <nav role="navigation" aria-label="Navegación principal">
+    <nav aria-label="nav">
         <ul>
-            <li><a href="#pilotos" aria-label="Ir a Pilotos">Pilotos</a></li>
-            <li><a href="#equipos" aria-label="Ir a Equipos">Equipos</a></li>
-            <li><a href="#calendario" aria-label="Ir a Calendario">Calendario</a></li>
-            <li><a href="https://www.formula1.com/" target="_blank" rel="noopener noreferrer" aria-label="Sitio oficial de la Formula 1 (se abre en nueva pestaña)">Sitio oficial</a></li>
+            <li><a href="#pilotos">Pilotos</a></li>
+            <li><a href="#equipos">Equipos</a></li>
+            <li><a href="#calendario">Calendario</a></li>
+            <li><a href="https://www.formula1.com/" target="_blank" rel="noopener noreferrer" aria-label="Sitio oficial de la Fórmula 1 (se abre en nueva pestaña)">Sitio oficial</a></li>
         </ul>
     </nav>
 
     <!-- MAIN CONTENT -->
-    <main id="main-content" role="main">
+    <main id="main-content" aria-label="main">
         <!-- SECTION: IMAGES -->
-        <section id="pilotos" class="seccion" aria-labelledby="h-pilotos">
+        <section id="pilotos" class="seccion">
             <h2 id="h-pilotos">Pilotos destacados</h2>
             <div class="galeria">
                 <figure>
-                    <img src="https://www.timesmonaco.com/wp-content/uploads/2023/05/Max-Verstappen-Red-Bull-2023-F1-scaled-1-1600x1280.jpg" alt="Max Verstappen">
+                    <img src="https://www.timesmonaco.com/wp-content/uploads/2023/05/Max-Verstappen-Red-Bull-2023-F1-scaled-1-1600x1280.jpg" alt="" loading="lazy" aria-hidden="true">
                     <figcaption>Max Verstappen</figcaption>
                 </figure>
                 <figure>
-                    <img src="https://www.big14news.com/wp-content/uploads/2025/10/Lewis_Hamilton_Lewis_Hamilton_Ferrari_qualifying.webp" alt="Lewis Hamilton">
+                    <img src="https://www.big14news.com/wp-content/uploads/2025/10/Lewis_Hamilton_Lewis_Hamilton_Ferrari_qualifying.webp" alt="" loading="lazy" aria-hidden="true">
                     <figcaption>Lewis Hamilton</figcaption>
                 </figure>
                 <figure>
-                    <img src="https://i.pinimg.com/originals/ce/1d/62/ce1d626c49b0018820bcc96fcc63f709.jpg" alt="Charles Leclerc">
+                    <img src="https://i.pinimg.com/originals/ce/1d/62/ce1d626c49b0018820bcc96fcc63f709.jpg" alt="" loading="lazy" aria-hidden="true">
                     <figcaption>Charles Leclerc</figcaption>
                 </figure>
             </div>
         </section>
 
         <!-- SECTION: TABLE -->
-        <section id="calendario" class="seccion" aria-labelledby="h-calendario">
+        <section id="calendario" class="seccion">
             <h2 id="h-calendario">Clasificación de pilotos (ejemplo)</h2>
             <div class="table-wrapper">
-            <table class="styled-table" role="table" aria-describedby="tabla-desc" aria-label="Clasificación de pilotos">
+            <table class="styled-table" aria-describedby="tabla-desc" aria-label="Clasificación de pilotos">
                 <caption id="tabla-desc">Pilotos y puntos (ejemplo)</caption>
                 <thead>
                     <tr>
@@ -60,19 +61,19 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>1</td>
+                        <th scope="row">1</th>
                         <td>Max Verstappen</td>
                         <td>Red Bull Racing</td>
                         <td>454</td>
                     </tr>
                     <tr>
-                        <td>2</td>
+                        <th scope="row">2</th>
                         <td>Oscar Piastri</td>
                         <td>McLaren</td>
                         <td>387</td>
                     </tr>
                     <tr>
-                        <td>3</td>
+                        <th scope="row">3</th>
                         <td>Charles Leclerc</td>
                         <td>Ferrari</td>
                         <td>320</td>
@@ -83,32 +84,72 @@
         </section>
 
         <!-- SECTION: FORM -->
-        <section id="formulario" class="seccion" aria-labelledby="h-formulario">
+        <section id="formulario" class="seccion">
             <h2 id="h-formulario">Suscríbete a noticias y alertas</h2>
-            <form action="#" method="post" aria-describedby="form-desc">
+            <form action="#" method="post" aria-describedby="form-desc form-status">
                 <p id="form-desc">Recibe noticias, resultados y alertas sobre la temporada de F1.</p>
 
-                <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+                <fieldset>
+                    <legend>Información de suscripción</legend>
 
-                <label for="email">Correo electrónico:</label>
-                <input type="email" id="email" name="email" placeholder="tu@correo.com" required>
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required aria-required="true">
 
-                <label for="interes">Interés:</label>
-                <select id="interes" name="interes">
-                    <option value="resultados">Resultados y clasificaciones</option>
-                    <option value="noticias">Noticias y rumores</option>
-                    <option value="estadisticas">Estadísticas y análisis</option>
-                </select>
+                    <label for="email">Correo electrónico:</label>
+                    <input type="email" id="email" name="email" placeholder="tu@correo.com" required aria-required="true">
 
-                <button type="submit" title="Suscribirse" aria-label="Suscribirse a noticias de Fórmula 1">Suscribirse</button>
+                    <label for="interes">Interés:</label>
+                    <select id="interes" name="interes">
+                        <option value="resultados">Resultados y clasificaciones</option>
+                        <option value="noticias">Noticias y rumores</option>
+                        <option value="estadisticas">Estadísticas y análisis</option>
+                    </select>
+                </fieldset>
+
+                <div id="form-status" role="status" aria-live="polite" aria-atomic="true" class="visually-hidden" tabindex="-1"></div>
+
+                <button type="submit" title="Suscribirse">Suscribirse</button>
             </form>
         </section>
     </main>
 
     <!-- FOOTER -->
-    <footer role="contentinfo">
+    <footer aria-label="footer">
         <p>&copy; 2025 - Sitio fan de la F1 | Fuentes: <a href="https://www.formula1.com/" target="_blank" rel="noopener noreferrer">formula1.com</a></p>
     </footer>
+        <script>
+            (function(){
+                // Manejo accesible del formulario: validación simple y mensajes en aria-live
+                var form = document.querySelector('form');
+                var status = document.getElementById('form-status');
+
+                function showMessage(message, isError){
+                    status.textContent = message;
+                    // Visually show the status for sighted users
+                    status.classList.remove('visually-hidden');
+                    status.style.padding = '0.5rem';
+                    status.style.background = isError ? '#fff1f0' : '#e8f5e9';
+                    status.style.color = isError ? '#8a1f1f' : '#1b5e20';
+                    // Move focus so screen readers announce it
+                    status.focus();
+                }
+
+                form.addEventListener('submit', function(e){
+                    e.preventDefault();
+                    var nombre = form.nombre.value.trim();
+                    var email = form.email.value.trim();
+                    var missing = [];
+                    if(!nombre) missing.push('nombre');
+                    if(!email) missing.push('correo electrónico');
+                    if(missing.length){
+                        showMessage('Campos obligatorios faltantes: ' + missing.join(', '), true);
+                        return;
+                    }
+                    // Simular envío exitoso
+                    showMessage('Gracias por suscribirte. Revisa tu correo para confirmar la suscripción.', false);
+                    form.reset();
+                });
+            })();
+        </script>
 </body>
 </html>

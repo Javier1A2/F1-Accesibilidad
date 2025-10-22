@@ -5,26 +5,33 @@ Este documento describe las mejoras de accesibilidad aplicadas a la página est�
 Resumen de medidas aplicadas
 
 - Estructura semántica y roles
-  - Uso de landmarks: `role="banner"`, `role="navigation"`, `role="main"`, `role="contentinfo"` para facilitar la navegación con tecnología asistiva.
-  - Títulos con `id` y `aria-labelledby` en secciones para referencias claras.
+  - Uso de elementos semánticos nativos (`<header>`, `<nav>`, `<main>`, `<footer>`) en lugar de roles ARIA redundantes. Esto asegura que los lectores de pantalla como NVDA detecten únicamente las regiones principales relevantes (header, navigation, main, footer) y evita la duplicación de landmarks.
+  - Se añadieron `aria-label` explícitos a las regiones principales con los nombres solicitados: `aria-label="header"`, `aria-label="nav"`, `aria-label="main"`, `aria-label="footer"`. Esto hace que NVDA muestre exactamente esos nombres en la lista de regiones.
+  - Títulos con `id` en secciones; las secciones usan encabezados (`<h2>`) y no usan `aria-labelledby` para evitar que lectores de pantalla las listaran como regiones adicionales. Esto ayuda a que NVDA muestre principalmente header, navigation, main y footer.
 
 - Saltar al contenido (Skip link)
   - Se añadió un enlace de salto al contenido principal que es visible al recibir foco desde el teclado.
+  - El enlace de salto (`.skip-link`) está implementado y visible al recibir foco. Se mejoraron los estilos para que tenga buen contraste y sea fácil de usar con teclado.
 
 - Imágenes
-  - Atributos `alt` descriptivos en imágenes. Se evita el uso de alt vacíos para imágenes significativas.
+  - Atributos `alt` descriptivos en imágenes. Se añadió texto alternativo más descriptivo (por ejemplo: "Foto de Max Verstappen, piloto de Red Bull Racing").
+  - En esta versión las fotos de la galería se consideran decorativas (mientras el texto de la leyenda repita la información) y por tanto se marcaron con `alt=""` y `aria-hidden="true"` para que sean ignoradas por lectores de pantalla.
+  - Se añadió `loading="lazy"` a imágenes de la galería para mejorar rendimiento y experiencia en dispositivos con lectores de pantalla.
 
 - Tablas
   - Se añadieron atributos `scope="col"` en encabezados y `caption` para describir la tabla.
+  - Además, las celdas de posición (primera columna) ahora son encabezados de fila: `<th scope="row">` para mejorar la lectura por AT.
 
 - Formularios
-  - Uso de `label` explícitos, `fieldset` y `legend` para agrupar campos.
-  - `aria-required="true"` en campos obligatorios.
-  - Un contenedor con `role="status"` y `aria-live="polite"` para mostrar mensajes de estado (p. ej. envío de formulario).
+  - Uso de `label` explícitos y ahora los campos están agrupados dentro de un `fieldset` con `legend` para mayor claridad.
+  - Se añadieron `aria-required="true"` en los campos obligatorios (`nombre`, `email`).
+  - Se añadió un contenedor con `role="status"` y `aria-live="polite"` (id `form-status`) para comunicar mensajes tras el envío del formulario. Actualmente es un elemento vacío y oculto visualmente hasta que se actualiza.
+    - Se añadió un script JS que valida el formulario en el cliente, muestra mensajes en `#form-status` y mueve el foco a ese contenedor cuando hay mensajes (errores o éxito). Esto permite que los lectores de pantalla anuncien el resultado inmediatamente.
 
 - Foco y contraste
-  - Estilos visibles y grandes para el foco de teclado (outline claramente visible).
-  - Contrastes mejorados entre fondo y elementos interactivos (botones y entradas) para legibilidad.
+  - Estilos visibles y grandes para el foco de teclado; se usa `:focus-visible` cuando está disponible para evitar mostrar outline al clicar con ratón.
+  - Se mejoraron estilos visuales del enlace de salto y el color del foco para mantener contraste suficiente.
+    - Se ajustó el color de acento a `#b71c1c` para mejorar contraste en botones y encabezados y acercarse a WCAG 2.1 AA; se recomienda validar con una herramienta de contraste para casos límite.
 
 - Accesibilidad para enlaces externos
   - Los enlaces que abren en una nueva ventana incluyen `rel="noopener noreferrer"` y el texto aclara que se abrirá una ventana nueva.
