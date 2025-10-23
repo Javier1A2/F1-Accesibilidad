@@ -20,7 +20,7 @@
             <li><a href="#pilotos">Pilotos</a></li>
             <li><a href="#equipos">Equipos</a></li>
             <li><a href="#calendario">Calendario</a></li>
-            <li><a href="https://www.formula1.com/" target="_blank" rel="noopener noreferrer" aria-label="Sitio oficial de la Fórmula 1 (se abre en nueva pestaña)">Sitio oficial</a></li>
+            <li><a href="https://www.formula1.com/" target="_blank" rel="noopener noreferrer">Sitio oficial <span class="visually-hidden">(se abre en nueva pestaña)</span></a></li>
         </ul>
     </nav>
 
@@ -31,15 +31,15 @@
             <h2 id="h-pilotos">Pilotos destacados</h2>
             <div class="galeria">
                 <figure>
-                    <img src="https://www.timesmonaco.com/wp-content/uploads/2023/05/Max-Verstappen-Red-Bull-2023-F1-scaled-1-1600x1280.jpg" alt="" loading="lazy" aria-hidden="true">
+                    <img src="https://www.timesmonaco.com/wp-content/uploads/2023/05/Max-Verstappen-Red-Bull-2023-F1-scaled-1-1600x1280.jpg" alt="" loading="lazy">
                     <figcaption>Max Verstappen</figcaption>
                 </figure>
                 <figure>
-                    <img src="https://www.big14news.com/wp-content/uploads/2025/10/Lewis_Hamilton_Lewis_Hamilton_Ferrari_qualifying.webp" alt="" loading="lazy" aria-hidden="true">
+                    <img src="https://www.big14news.com/wp-content/uploads/2025/10/Lewis_Hamilton_Lewis_Hamilton_Ferrari_qualifying.webp" alt="" loading="lazy">
                     <figcaption>Lewis Hamilton</figcaption>
                 </figure>
                 <figure>
-                    <img src="https://i.pinimg.com/originals/ce/1d/62/ce1d626c49b0018820bcc96fcc63f709.jpg" alt="" loading="lazy" aria-hidden="true">
+                    <img src="https://i.pinimg.com/originals/ce/1d/62/ce1d626c49b0018820bcc96fcc63f709.jpg" alt="" loading="lazy">
                     <figcaption>Charles Leclerc</figcaption>
                 </figure>
             </div>
@@ -59,25 +59,8 @@
                         <th scope="col">Puntos</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Max Verstappen</td>
-                        <td>Red Bull Racing</td>
-                        <td>454</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Oscar Piastri</td>
-                        <td>McLaren</td>
-                        <td>387</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Charles Leclerc</td>
-                        <td>Ferrari</td>
-                        <td>320</td>
-                    </tr>
+                <tbody id="standings-body">
+                    <!-- Filas generadas dinámicamente desde el array de pilotos -->
                 </tbody>
             </table>
             </div>
@@ -93,37 +76,31 @@
                     <legend>Información de suscripción</legend>
 
                     <label for="nombre">Nombre:</label>
-                    <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required aria-required="true">
+                    <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required aria-required="true" aria-describedby="error-nombre">
+                    <span id="error-nombre" class="visually-hidden" aria-live="assertive"></span>
 
                     <label for="email">Correo electrónico:</label>
-                    <input type="email" id="email" name="email" placeholder="tu@correo.com" required aria-required="true">
+                    <input type="email" id="email" name="email" placeholder="tu@correo.com" required aria-required="true" aria-describedby="error-email">
+                    <span id="error-email" class="visually-hidden" aria-live="assertive"></span>
 
                     <label for="interes">Interés:</label>
                     <select id="interes" name="interes">
                         <option value="resultados">Resultados y clasificaciones</option>
                         <option value="noticias">Noticias y rumores</option>
-                        <option value="estadisticas">Estadísticas y análisis</option>
+                        <option value="estadisticas" selected>Estadísticas y análisis</option>
                     </select>
                     
                                         <!-- Nuevo: elegir piloto favorito -->
-                                        <fieldset>
+                                        <fieldset id="piloto-radios-fieldset">
                                             <legend>Elige tu piloto favorito</legend>
-                                            <div>
-                                                <input type="radio" id="piloto-max" name="piloto" value="max">
-                                                <label for="piloto-max">Max Verstappen</label>
-                                            </div>
-                                            <div>
-                                                <input type="radio" id="piloto-piastri" name="piloto" value="piastri">
-                                                <label for="piloto-piastri">Oscar Piastri</label>
-                                            </div>
-                                            <div>
-                                                <input type="radio" id="piloto-leclerc" name="piloto" value="leclerc">
-                                                <label for="piloto-leclerc">Charles Leclerc</label>
-                                            </div>
+                                            <div id="piloto-radios"><!-- radios generados dinámicamente --></div>
                                         </fieldset>
                 </fieldset>
 
                 <div id="form-status" role="status" aria-live="polite" aria-atomic="true" class="visually-hidden" tabindex="-1"></div>
+
+                <!-- Área dinámica con estadísticas/análisis del piloto seleccionado -->
+                <div id="pilot-analysis" class="visually-hidden" aria-live="polite" aria-atomic="true" tabindex="-1"></div>
 
                 <button type="submit" title="Suscribirse">Suscribirse</button>
             </form>
@@ -135,82 +112,145 @@
         <p>&copy; 2025 - Sitio fan de la F1 | Fuentes: <a href="https://www.formula1.com/" target="_blank" rel="noopener noreferrer">formula1.com</a></p>
     </footer>
         <script>
-                (function(){
-                    // Manejo accesible del formulario: validación, mensajes y piloto->equipo
-                    var form = document.querySelector('form');
-                    var status = document.getElementById('form-status');
+            (function(){
+                var form = document.querySelector('form');
+                var status = document.getElementById('form-status');
+                var analysisEl = document.getElementById('pilot-analysis');
 
-                    function showMessage(message, isError){
-                        status.textContent = message;
-                        status.classList.remove('visually-hidden');
-                        status.style.padding = '0.5rem';
-                        status.style.background = isError ? '#fff1f0' : '#e8f5e9';
-                        status.style.color = isError ? '#8a1f1f' : '#1b5e20';
-                        // Ensure screen readers announce the updated content
-                        status.focus();
-                    }
+                function showMessage(message, isError){
+                    status.textContent = message;
+                    status.classList.remove('visually-hidden');
+                    status.style.padding = '0.5rem';
+                    status.style.background = isError ? '#fff1f0' : '#e8f5e9';
+                    status.style.color = isError ? '#8a1f1f' : '#1b5e20';
+                    // announce but don't forcibly move focus (to avoid disorienting keyboard users)
+                    // leave focus handling to error logic when needed
+                }
 
-                    // Helper: obtener nombre legible del piloto según el value del radio
-                    var pilotNames = {
-                        'max': 'Max Verstappen',
-                        'piastri': 'Oscar Piastri',
-                        'leclerc': 'Charles Leclerc'
-                    };
+                // pilots array (same as before)
+                var pilots = [
+                    { id: 'max', name: 'Max Verstappen', team: 'Red Bull Racing', points: 454 },
+                    { id: 'piastri', name: 'Oscar Piastri', team: 'McLaren', points: 387 },
+                    { id: 'leclerc', name: 'Charles Leclerc', team: 'Ferrari', points: 320 },
+                    { id: 'hamilton', name: 'Lewis Hamilton', team: 'Ferrari', points: 290 },
+                    { id: 'norris', name: 'Lando Norris', team: 'McLaren', points: 265 },
+                    { id: 'sainz', name: 'Carlos Sainz', team: 'Ferrari', points: 240 },
+                    { id: 'russell', name: 'George Russell', team: 'Mercedes', points: 220 },
+                    { id: 'perez', name: 'Sergio Pérez', team: 'Red Bull Racing', points: 210 },
+                    { id: 'alonso', name: 'Fernando Alonso', team: 'Aston Martin', points: 195 },
+                    { id: 'ocon', name: 'Esteban Ocon', team: 'Alpine', points: 150 },
+                    { id: 'bottas', name: 'Valtteri Bottas', team: 'Alfa Romeo', points: 130 },
+                    { id: 'zhou', name: 'Zhou Guanyu', team: 'Alfa Romeo', points: 120 },
+                    { id: 'stroll', name: 'Lance Stroll', team: 'Aston Martin', points: 115 },
+                    { id: 'gasly', name: 'Pierre Gasly', team: 'Alpine', points: 100 },
+                    { id: 'tsunoda', name: 'Yuki Tsunoda', team: 'Haas', points: 85 },
+                    { id: 'hulkenberg', name: 'Nico Hülkenberg', team: 'Haas', points: 70 },
+                    { id: 'Bortoleto', name: 'Gabriel Bortoleto', team: 'AlphaTauri', points: 50 },
+                    { id: 'albon', name: 'Alex Albon', team: 'Williams', points: 45 },
+                    { id: 'de_vries', name: 'Nyck de Vries', team: 'Williams', points: 30 },
+                    { id: 'ricciardo', name: 'Daniel Ricciardo', team: 'AlphaTauri', points: 20 }
+                ];
 
-                    // Leer la tabla de clasificación para obtener el equipo según nombre del piloto
-                    function getTeamFromTable(pilotFullName){
-                        if(!pilotFullName) return null;
-                        var rows = document.querySelectorAll('.styled-table tbody tr');
-                        for(var i=0;i<rows.length;i++){
-                            // cells can include a th for the first column
-                            var cells = rows[i].querySelectorAll('th, td');
-                            var pilotCell = (cells[1] && cells[1].textContent || '').trim();
-                            var teamCell = (cells[2] && cells[2].textContent || '').trim();
-                            if(pilotCell && pilotCell.toLowerCase().indexOf(pilotFullName.toLowerCase().split(' ')[0]) !== -1){
-                                return teamCell;
-                            }
-                        }
-                        return null;
-                    }
+                function findPilotById(id){ return pilots.find(function(p){ return p.id === id; }) || null; }
 
-                    function buildMessage(nombre, pilotValue){
-                        var pilotFull = pilotNames[pilotValue] || '';
-                        var team = getTeamFromTable(pilotFull) || '';
-                        var parts = [];
-                        if(nombre) parts.push('Felicidades, ' + nombre + '!');
-                        if(pilotFull && team) parts.push('Apoyas a ' + pilotFull + ' del equipo ' + team + '.');
-                        else if(pilotFull) parts.push('Apoyas a ' + pilotFull + '.');
-                        return parts.join(' ');
-                    }
+                function renderPilots(){
+                    var tbody = document.getElementById('standings-body'); tbody.innerHTML = '';
+                    pilots.forEach(function(p, idx){
+                        var tr = document.createElement('tr');
+                        var th = document.createElement('th'); th.setAttribute('scope','row'); th.textContent = (idx+1); tr.appendChild(th);
+                        var tdName = document.createElement('td'); tdName.textContent = p.name; tr.appendChild(tdName);
+                        var tdTeam = document.createElement('td'); tdTeam.textContent = p.team; tr.appendChild(tdTeam);
+                        var tdPoints = document.createElement('td'); tdPoints.textContent = p.points; tr.appendChild(tdPoints);
+                        tbody.appendChild(tr);
+                    });
+                    var radiosContainer = document.getElementById('piloto-radios'); radiosContainer.innerHTML = '';
+                    pilots.forEach(function(p){
+                        var div = document.createElement('div');
+                        var input = document.createElement('input'); input.type = 'radio'; input.id = 'piloto-' + p.id; input.name = 'piloto'; input.value = p.id; if(p.id === 'leclerc') input.checked = true;
+                        var label = document.createElement('label'); label.setAttribute('for', input.id); label.textContent = p.name;
+                        div.appendChild(input); div.appendChild(label); radiosContainer.appendChild(div);
+                    });
+                }
 
-                    // Escuchar cambios en radios para anunciar inmediatamente (incluye nombre si ya fue ingresado)
+                renderPilots();
+
+                // Field-level error spans
+                var errNombre = document.getElementById('error-nombre');
+                var errEmail = document.getElementById('error-email');
+
+                function setFieldError(field, message){
+                    var errEl = null;
+                    if(field.id === 'nombre') errEl = errNombre; else if(field.id === 'email') errEl = errEmail;
+                    if(errEl){ errEl.textContent = message; errEl.classList.remove('visually-hidden'); field.setAttribute('aria-describedby', errEl.id); }
+                }
+                function clearFieldError(field){
+                    var errEl = null;
+                    if(field.id === 'nombre') errEl = errNombre; else if(field.id === 'email') errEl = errEmail;
+                    if(errEl){ errEl.textContent = ''; errEl.classList.add('visually-hidden'); field.removeAttribute('aria-describedby'); }
+                }
+
+                function validateForm(){
+                    var nombre = form.nombre.value.trim();
+                    var email = form.email.value.trim();
+                    var selected = form.querySelector('input[name="piloto"]:checked');
+                    var firstInvalid = null;
+                    // clear previous
+                    clearFieldError(form.nombre); clearFieldError(form.email); status.classList.add('visually-hidden');
+
+                    if(!nombre){ setFieldError(form.nombre, 'El nombre es obligatorio'); firstInvalid = firstInvalid || form.nombre; }
+                    if(!email){ setFieldError(form.email, 'El correo electrónico es obligatorio'); firstInvalid = firstInvalid || form.email; }
+                    if(!selected){ showMessage('Selecciona un piloto favorito', true); if(!firstInvalid) { var radiosFieldset = document.getElementById('piloto-radios-fieldset'); firstInvalid = radiosFieldset; } }
+
+                    return firstInvalid;
+                }
+
+                // Attach listeners to radios to update analysis and clear errors
+                function attachRadioListeners(){
                     var radios = form.querySelectorAll('input[name="piloto"]');
-                    radios.forEach(function(r){
-                        r.addEventListener('change', function(){
-                            var nombre = form.nombre.value.trim();
-                            var msg = buildMessage(nombre, r.value);
-                            if(msg) showMessage(msg, false);
-                        });
-                    });
+                    radios.forEach(function(r){ r.addEventListener('change', function(){ clearFieldError(r); var nombre = form.nombre.value.trim(); var msg = buildMessage(nombre, r.value); if(msg) showMessage(msg, false); updatePilotAnalysis(r.value); }); });
+                }
 
-                    form.addEventListener('submit', function(e){
-                        e.preventDefault();
-                        var nombre = form.nombre.value.trim();
-                        var email = form.email.value.trim();
-                        var selected = form.querySelector('input[name="piloto"]:checked');
-                        var missing = [];
-                        if(!nombre) missing.push('nombre');
-                        if(!email) missing.push('correo electrónico');
-                        if(!selected) missing.push('piloto favorito');
-                        if(missing.length){
-                            showMessage('Campos obligatorios faltantes: ' + missing.join(', '), true);
-                            return;
-                        }
-                        var msg = buildMessage(nombre, selected.value);
-                        showMessage('Gracias por suscribirte. ' + msg, false);
-                        form.reset();
-                    });
-                })();
+                attachRadioListeners();
+
+                function buildMessage(nombre, pilotValue){
+                    var pilot = findPilotById(pilotValue); var pilotFull = (pilot && pilot.name) || ''; var team = (pilot && pilot.team) || '';
+                    var parts = []; if(nombre) parts.push('Felicidades, ' + nombre + '!'); if(pilotFull && team) parts.push('Apoyas a ' + pilotFull + ' del equipo ' + team + '.'); else if(pilotFull) parts.push('Apoyas a ' + pilotFull + '.'); return parts.join(' ');
+                }
+
+                form.addEventListener('submit', function(e){
+                    e.preventDefault();
+                    var firstInvalid = validateForm();
+                    if(firstInvalid){
+                        // Move focus to first invalid control (or fieldset)
+                        firstInvalid.focus();
+                        return;
+                    }
+                    var selected = form.querySelector('input[name="piloto"]:checked');
+                    var msg = buildMessage(form.nombre.value.trim(), selected && selected.value);
+                    showMessage('Gracias por suscribirte. ' + msg, false);
+                    form.reset();
+                    renderPilots(); // re-render to reset radios (Leclerc default)
+                    attachRadioListeners();
+                    updatePilotAnalysis('leclerc');
+                });
+
+                // Pilot analysis rendering (same as before)
+                function getTeamFromTable(pilotFullName){
+                    if(!pilotFullName) return null; var rows = document.querySelectorAll('.styled-table tbody tr'); for(var i=0;i<rows.length;i++){ var cells = rows[i].querySelectorAll('th, td'); var pilotCell = (cells[1] && cells[1].textContent || '').trim(); var teamCell = (cells[2] && cells[2].textContent || '').trim(); if(pilotCell && pilotCell.toLowerCase().indexOf(pilotFullName.toLowerCase().split(' ')[0]) !== -1){ return teamCell; } } return null; }
+
+                function updatePilotAnalysis(pilotValue){
+                    if(!pilotValue){ analysisEl.classList.add('visually-hidden'); return; }
+                    var pilot = findPilotById(pilotValue); var pilotFull = (pilot && pilot.name) || '';
+                    var rows = document.querySelectorAll('.styled-table tbody tr'); var position = ''; var points = '';
+                    for(var i=0;i<rows.length;i++){ var cells = rows[i].querySelectorAll('th, td'); var pilotCell = (cells[1] && cells[1].textContent || '').trim(); if(pilotCell && pilotCell.indexOf(pilotFull.split(' ')[0]) !== -1){ position = (cells[0] && cells[0].textContent || '').trim(); points = (cells[3] && cells[3].textContent || '').trim(); break; } }
+                    var text = '';
+                    if(pilotFull){ text += pilotFull + ' actualmente ocupa la posición ' + (position || 'N/A') + ' con ' + (points || '0') + ' puntos.'; text += ' Seguimiento: recibirás estadísticas y análisis periódicos sobre su rendimiento.'; }
+                    analysisEl.textContent = text; analysisEl.classList.remove('visually-hidden');
+                }
+
+                // Inicializar análisis preseleccionado (Charles Leclerc)
+                updatePilotAnalysis('leclerc');
+            })();
         </script>
 </body>
 </html>
