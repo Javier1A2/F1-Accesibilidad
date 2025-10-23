@@ -15,7 +15,7 @@ Resumen de medidas aplicadas
 
 - Imágenes
   - Atributos `alt` descriptivos en imágenes. Se añadió texto alternativo más descriptivo (por ejemplo: "Foto de Max Verstappen, piloto de Red Bull Racing").
-  - En esta versión las fotos de la galería se consideran decorativas (mientras el texto de la leyenda repita la información) y por tanto se marcaron con `alt=""` y `aria-hidden="true"` para que sean ignoradas por lectores de pantalla.
+  - En esta versión las fotos de la galería se consideran decorativas (mientras el texto de la leyenda repita la información) y por tanto se marcaron con `alt=""` para que sean ignoradas por lectores de pantalla.
   - Se añadió `loading="lazy"` a imágenes de la galería para mejorar rendimiento y experiencia en dispositivos con lectores de pantalla.
 
 - Tablas
@@ -25,7 +25,10 @@ Resumen de medidas aplicadas
 - Formularios
   - Uso de `label` explícitos y ahora los campos están agrupados dentro de un `fieldset` con `legend` para mayor claridad.
   - Se añadieron `aria-required="true"` en los campos obligatorios (`nombre`, `email`).
-  - Se añadió un contenedor con `role="status"` y `aria-live="polite"` (id `form-status`) para comunicar mensajes tras el envío del formulario. Actualmente es un elemento vacío y oculto visualmente hasta que se actualiza.
+  - Se añadió un contenedor con `role="status"` y `aria-live="polite"` (id `form-status`) para comunicar mensajes tras el envío del formulario. El script actual muestra mensajes ahí, pero evita mover el foco automáticamente para no desorientar a usuarios de teclado; los errores por campo se muestran en spans inline con `aria-describedby` y el foco se mueve al primer campo inválido.
+    - Se añadió un control para elegir el piloto favorito mediante radios. Cuando el usuario selecciona un piloto se muestra un mensaje accesible (ej.: "Felicidades, apoyas al equipo Red Bull Racing.") en `#form-status`. El mismo mensaje se incluye al enviar el formulario.
+      - El mensaje ahora incluye el nombre del usuario (si ya lo ingresó), el piloto seleccionado y el equipo asociado, obtenido leyendo la tabla de clasificación presente en la página. Ejemplo: "Gracias por suscribirte. Felicidades, Javier! Apoyas a Max Verstappen del equipo Red Bull Racing."
+        - Se añadió un área de análisis (`#pilot-analysis`) que muestra estadísticas básicas del piloto seleccionado (posición y puntos) extraídas de la tabla en la página. Se preseleccionó a Charles Leclerc y la opción "Estadísticas y análisis" para la experiencia de un fan apasionado. El contenido del análisis es accesible mediante `aria-live`.
     - Se añadió un script JS que valida el formulario en el cliente, muestra mensajes en `#form-status` y mueve el foco a ese contenedor cuando hay mensajes (errores o éxito). Esto permite que los lectores de pantalla anuncien el resultado inmediatamente.
 
 - Foco y contraste
@@ -35,6 +38,7 @@ Resumen de medidas aplicadas
 
 - Accesibilidad para enlaces externos
   - Los enlaces que abren en una nueva ventana incluyen `rel="noopener noreferrer"` y el texto aclara que se abrirá una ventana nueva.
+  - Se añadió un texto accesible y oculto visualmente para indicar que el enlace al sitio oficial se abre en una nueva pestaña: `Sitio oficial (se abre en nueva pestaña)`.
 
 Mapeo rápido a WCAG (Quick Reference)
 
