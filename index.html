@@ -85,15 +85,20 @@
 
                     <label for="interes">Interés:</label>
                     <select id="interes" name="interes">
-                        <option value="resultados">Resultados y clasificaciones</option>
+                        <option value="resultados" selected>Resultados y clasificaciones</option>
                         <option value="noticias">Noticias y rumores</option>
-                        <option value="estadisticas" selected>Estadísticas y análisis</option>
+                        <option value="estadisticas">Estadísticas y análisis</option>
                     </select>
                     
                                         <!-- Nuevo: elegir piloto favorito -->
                                         <fieldset id="piloto-radios-fieldset">
                                             <legend>Elige tu piloto favorito</legend>
                                             <div id="piloto-radios"><!-- radios generados dinámicamente --></div>
+                                            <div id="piloto-otro-container" style="display:none;">
+                                                <label for="piloto-otro-text">Escribe el nombre del piloto:</label>
+                                                <input type="text" id="piloto-otro-text" name="piloto_otro_name" placeholder="Nombre del piloto" aria-describedby="error-piloto-otro">
+                                                <span id="error-piloto-otro" class="visually-hidden" aria-live="assertive"></span>
+                                            </div>
                                         </fieldset>
                 </fieldset>
 
@@ -109,7 +114,7 @@
 
     <!-- FOOTER -->
     <footer aria-label="footer">
-        <p>&copy; 2025 - Sitio fan de la F1 | Fuentes: <a href="https://www.formula1.com/" target="_blank" rel="noopener noreferrer">formula1.com</a></p>
+        <p>&copy; 2025 - Sitio fan de la F1 | Fuentes: <a href="https://www.formula1.com/" target="_blank" rel="noopener noreferrer">formula1</a></p>
     </footer>
         <script>
             (function(){
@@ -123,32 +128,29 @@
                     status.style.padding = '0.5rem';
                     status.style.background = isError ? '#fff1f0' : '#e8f5e9';
                     status.style.color = isError ? '#8a1f1f' : '#1b5e20';
-                    // announce but don't forcibly move focus (to avoid disorienting keyboard users)
-                    // leave focus handling to error logic when needed
                 }
 
-                // pilots array (same as before)
                 var pilots = [
-                    { id: 'max', name: 'Max Verstappen', team: 'Red Bull Racing', points: 454 },
-                    { id: 'piastri', name: 'Oscar Piastri', team: 'McLaren', points: 387 },
-                    { id: 'leclerc', name: 'Charles Leclerc', team: 'Ferrari', points: 320 },
-                    { id: 'hamilton', name: 'Lewis Hamilton', team: 'Ferrari', points: 290 },
-                    { id: 'norris', name: 'Lando Norris', team: 'McLaren', points: 265 },
-                    { id: 'sainz', name: 'Carlos Sainz', team: 'Ferrari', points: 240 },
-                    { id: 'russell', name: 'George Russell', team: 'Mercedes', points: 220 },
-                    { id: 'perez', name: 'Sergio Pérez', team: 'Red Bull Racing', points: 210 },
-                    { id: 'alonso', name: 'Fernando Alonso', team: 'Aston Martin', points: 195 },
-                    { id: 'ocon', name: 'Esteban Ocon', team: 'Alpine', points: 150 },
-                    { id: 'bottas', name: 'Valtteri Bottas', team: 'Alfa Romeo', points: 130 },
-                    { id: 'zhou', name: 'Zhou Guanyu', team: 'Alfa Romeo', points: 120 },
-                    { id: 'stroll', name: 'Lance Stroll', team: 'Aston Martin', points: 115 },
-                    { id: 'gasly', name: 'Pierre Gasly', team: 'Alpine', points: 100 },
-                    { id: 'tsunoda', name: 'Yuki Tsunoda', team: 'Haas', points: 85 },
-                    { id: 'hulkenberg', name: 'Nico Hülkenberg', team: 'Haas', points: 70 },
-                    { id: 'Bortoleto', name: 'Gabriel Bortoleto', team: 'AlphaTauri', points: 50 },
-                    { id: 'albon', name: 'Alex Albon', team: 'Williams', points: 45 },
-                    { id: 'de_vries', name: 'Nyck de Vries', team: 'Williams', points: 30 },
-                    { id: 'ricciardo', name: 'Daniel Ricciardo', team: 'AlphaTauri', points: 20 }
+                    { id: 'max', name: 'Max Verstappen', team: 'Red Bull Racing', points: 454, description: 'Campeón dominante conocido por su consistencia y velocidad en carrera.' },
+                    { id: 'piastri', name: 'Oscar Piastri', team: 'McLaren', points: 387, description: 'Joven talento con actuaciones sólidas y carrera prometedora.' },
+                    { id: 'leclerc', name: 'Charles Leclerc', team: 'Ferrari', points: 320, description: 'Piloto rápido y agresivo, conocido por su capacidad de calificación.' },
+                    { id: 'hamilton', name: 'Lewis Hamilton', team: 'Ferrari', points: 290, description: 'Veterano siete veces campeón, experto en gestión de carrera.' },
+                    { id: 'norris', name: 'Lando Norris', team: 'McLaren', points: 265, description: 'Piloto joven con gran control del coche y velocidad en tanda corta.' },
+                    { id: 'sainz', name: 'Carlos Sainz', team: 'Ferrari', points: 240, description: 'Conductor consistente y estratégico con experiencia en varios equipos.' },
+                    { id: 'russell', name: 'George Russell', team: 'Mercedes', points: 220, description: 'Piloto técnico con buen ritmo en clasificación.' },
+                    { id: 'perez', name: 'Sergio Pérez', team: 'Red Bull Racing', points: 210, description: 'Experto en gestión de neumáticos y carreras con estrategia.' },
+                    { id: 'alonso', name: 'Fernando Alonso', team: 'Aston Martin', points: 195, description: 'Piloto veterano con gran sentido táctico y competitividad.' },
+                    { id: 'ocon', name: 'Esteban Ocon', team: 'Alpine', points: 150, description: 'Conductor consistente que aporta puntos regulares al equipo.' },
+                    { id: 'bottas', name: 'Valtteri Bottas', team: 'Alfa Romeo', points: 130, description: 'Piloto rápido con experiencia y buenos resultados en carrera.' },
+                    { id: 'zhou', name: 'Zhou Guanyu', team: 'Alfa Romeo', points: 120, description: 'Piloto en crecimiento con actuaciones estables.' },
+                    { id: 'stroll', name: 'Lance Stroll', team: 'Aston Martin', points: 115, description: 'Conductor con buen ritmo en clasificación en pistas mixtas.' },
+                    { id: 'gasly', name: 'Pierre Gasly', team: 'Alpine', points: 100, description: 'Piloto con buen ritmo en carreras y talento para recuperaciones.' },
+                    { id: 'tsunoda', name: 'Yuki Tsunoda', team: 'Haas', points: 85, description: 'Piloto agresivo que a menudo sorprende con maniobras valientes.' },
+                    { id: 'hulkenberg', name: 'Nico Hülkenberg', team: 'Haas', points: 70, description: 'Veterano con experiencia y actuaciones seguras cuando es necesario.' },
+                    { id: 'Bortoleto', name: 'Gabriel Bortoleto', team: 'AlphaTauri', points: 50, description: 'Joven promesa con mucho potencial por desarrollar.' },
+                    { id: 'albon', name: 'Alex Albon', team: 'Williams', points: 45, description: 'Piloto con buen control de coche y consistencia en carrera.' },
+                    { id: 'de_vries', name: 'Nyck de Vries', team: 'Williams', points: 30, description: 'Talento versátil con experiencia en distintas categorías.' },
+                    { id: 'ricciardo', name: 'Daniel Ricciardo', team: 'AlphaTauri', points: 20, description: 'Piloto carismático conocido por adelantamientos y ofensiva en carrera.' }
                 ];
 
                 function findPilotById(id){ return pilots.find(function(p){ return p.id === id; }) || null; }
@@ -163,13 +165,30 @@
                         var tdPoints = document.createElement('td'); tdPoints.textContent = p.points; tr.appendChild(tdPoints);
                         tbody.appendChild(tr);
                     });
+
+                    // Radios: only first 5 pilots + 'Otro'
                     var radiosContainer = document.getElementById('piloto-radios'); radiosContainer.innerHTML = '';
-                    pilots.forEach(function(p){
+                    var topFive = pilots.slice(0,5);
+                    topFive.forEach(function(p){
                         var div = document.createElement('div');
-                        var input = document.createElement('input'); input.type = 'radio'; input.id = 'piloto-' + p.id; input.name = 'piloto'; input.value = p.id; if(p.id === 'leclerc') input.checked = true;
+                        var input = document.createElement('input'); input.type = 'radio'; input.id = 'piloto-' + p.id; input.name = 'piloto'; input.value = p.id;
+                        // No pilot preselected by default to avoid showing messages antes de completar el formulario
                         var label = document.createElement('label'); label.setAttribute('for', input.id); label.textContent = p.name;
                         div.appendChild(input); div.appendChild(label); radiosContainer.appendChild(div);
                     });
+
+                    // 'Otro' option
+                    var otroDiv = document.createElement('div');
+                    var otroInput = document.createElement('input'); otroInput.type = 'radio'; otroInput.id = 'piloto-otro'; otroInput.name = 'piloto'; otroInput.value = 'otro';
+                    var otroLabel = document.createElement('label'); otroLabel.setAttribute('for', otroInput.id); otroLabel.textContent = 'Otro';
+                    otroDiv.appendChild(otroInput); otroDiv.appendChild(otroLabel); radiosContainer.appendChild(otroDiv);
+
+                    // Hide/clear 'otro' text input container by default
+                    var otroContainer = document.getElementById('piloto-otro-container');
+                    otroContainer.style.display = 'none';
+                    otroContainer.setAttribute('aria-hidden', 'true');
+                    var otroText = document.getElementById('piloto-otro-text');
+                    if(otroText) { otroText.value = ''; }
                 }
 
                 renderPilots();
@@ -177,15 +196,20 @@
                 // Field-level error spans
                 var errNombre = document.getElementById('error-nombre');
                 var errEmail = document.getElementById('error-email');
+                var errPilotoOtro = document.getElementById('error-piloto-otro');
 
                 function setFieldError(field, message){
                     var errEl = null;
-                    if(field.id === 'nombre') errEl = errNombre; else if(field.id === 'email') errEl = errEmail;
+                    if(field.id === 'nombre') errEl = errNombre;
+                    else if(field.id === 'email') errEl = errEmail;
+                    else if(field.id === 'piloto-otro-text' || field.name === 'piloto_otro_name') errEl = errPilotoOtro;
                     if(errEl){ errEl.textContent = message; errEl.classList.remove('visually-hidden'); field.setAttribute('aria-describedby', errEl.id); }
                 }
                 function clearFieldError(field){
                     var errEl = null;
-                    if(field.id === 'nombre') errEl = errNombre; else if(field.id === 'email') errEl = errEmail;
+                    if(field.id === 'nombre') errEl = errNombre;
+                    else if(field.id === 'email') errEl = errEmail;
+                    else if(field.id === 'piloto-otro-text' || field.name === 'piloto_otro_name') errEl = errPilotoOtro;
                     if(errEl){ errEl.textContent = ''; errEl.classList.add('visually-hidden'); field.removeAttribute('aria-describedby'); }
                 }
 
@@ -195,61 +219,159 @@
                     var selected = form.querySelector('input[name="piloto"]:checked');
                     var firstInvalid = null;
                     // clear previous
-                    clearFieldError(form.nombre); clearFieldError(form.email); status.classList.add('visually-hidden');
+                    clearFieldError(form.nombre); clearFieldError(form.email); if(document.getElementById('piloto-otro-text')) clearFieldError(document.getElementById('piloto-otro-text')); status.classList.add('visually-hidden');
 
                     if(!nombre){ setFieldError(form.nombre, 'El nombre es obligatorio'); firstInvalid = firstInvalid || form.nombre; }
                     if(!email){ setFieldError(form.email, 'El correo electrónico es obligatorio'); firstInvalid = firstInvalid || form.email; }
                     if(!selected){ showMessage('Selecciona un piloto favorito', true); if(!firstInvalid) { var radiosFieldset = document.getElementById('piloto-radios-fieldset'); firstInvalid = radiosFieldset; } }
 
+                    // If 'otro' selected, require the text
+                    if(selected && selected.value === 'otro'){
+                        var otherInput = document.getElementById('piloto-otro-text');
+                        if(!otherInput || !otherInput.value.trim()){
+                            setFieldError(otherInput, 'Por favor escribe el nombre del piloto');
+                            firstInvalid = firstInvalid || otherInput;
+                        }
+                    }
+
                     return firstInvalid;
                 }
 
-                // Attach listeners to radios to update analysis and clear errors
+                // Attach listeners to radios to update analysis and clear errors; also handle showing the 'otro' input
                 function attachRadioListeners(){
                     var radios = form.querySelectorAll('input[name="piloto"]');
-                    radios.forEach(function(r){ r.addEventListener('change', function(){ clearFieldError(r); var nombre = form.nombre.value.trim(); var msg = buildMessage(nombre, r.value); if(msg) showMessage(msg, false); updatePilotAnalysis(r.value); }); });
+                    radios.forEach(function(r){
+                        r.addEventListener('change', function(){
+                            // If the chosen is 'otro', show the text input; otherwise hide it
+                            var otroContainer = document.getElementById('piloto-otro-container');
+                            var otroText = document.getElementById('piloto-otro-text');
+                            if(r.value === 'otro'){
+                                otroContainer.style.display = '';
+                                otroContainer.removeAttribute('aria-hidden');
+                                if(otroText) { otroText.focus(); }
+                            } else {
+                                otroContainer.style.display = 'none';
+                                otroContainer.setAttribute('aria-hidden', 'true');
+                                if(otroText){ clearFieldError(otroText); }
+                            }
+
+                            // clear any field-level error associated with the piloto selection
+                            if(r.id !== 'piloto-otro') clearFieldError(r);
+
+                            // Nota: ya no mostramos un mensaje breve al seleccionar un piloto
+                            // para evitar anuncios automáticos no deseados mientras el usuario
+                            // todavía está completando el formulario.
+                            // Ensure detailed analysis is hidden while the user is still selecting
+                            if(analysisEl){ analysisEl.classList.add('visually-hidden'); analysisEl.textContent = ''; }
+                            // Do not update detailed analysis until the user submits the form
+                        });
+                    });
                 }
 
                 attachRadioListeners();
 
-                function buildMessage(nombre, pilotValue){
-                    var pilot = findPilotById(pilotValue); var pilotFull = (pilot && pilot.name) || ''; var team = (pilot && pilot.team) || '';
-                    var parts = []; if(nombre) parts.push('Felicidades, ' + nombre + '!'); if(pilotFull && team) parts.push('Apoyas a ' + pilotFull + ' del equipo ' + team + '.'); else if(pilotFull) parts.push('Apoyas a ' + pilotFull + '.'); return parts.join(' ');
+                // Mensaje breve para la selección (cuando el usuario selecciona un piloto): solo piloto y equipo
+                function buildSelectionMessage(pilotValue){
+                    if(!pilotValue) return '';
+                    var pilotFull = '';
+                    var team = '';
+                    if(pilotValue === 'otro'){
+                        pilotFull = (document.getElementById('piloto-otro-text') && document.getElementById('piloto-otro-text').value.trim()) || '';
+                        if(pilotFull) return 'Apoyas a ' + pilotFull + '.';
+                        return 'Has seleccionado "Otro" como piloto favorito.';
+                    }
+                    var pilot = findPilotById(pilotValue);
+                    pilotFull = (pilot && pilot.name) || '';
+                    team = (pilot && pilot.team) || '';
+                    if(pilotFull && team) return 'Apoyas a ' + pilotFull + ' del equipo ' + team + '.';
+                    if(pilotFull) return 'Apoyas a ' + pilotFull + '.';
+                    return '';
+                }
+
+                // Mensaje completo para el envío: incluye saludo, descripción del piloto y las preferencias seleccionadas
+                function buildSubmitMessage(nombre, pilotValue){
+                    var parts = [];
+                    if(nombre) parts.push('Felicidades, ' + nombre + '!');
+
+                    var pilotFull = '';
+                    var team = '';
+                    var position = '';
+                    var points = '';
+                    if(pilotValue === 'otro'){
+                        pilotFull = (document.getElementById('piloto-otro-text') && document.getElementById('piloto-otro-text').value.trim()) || '';
+                    } else {
+                        var pilot = findPilotById(pilotValue);
+                        pilotFull = (pilot && pilot.name) || '';
+                        team = (pilot && pilot.team) || '';
+                        points = (pilot && pilot.points) != null ? String(pilot.points) : '';
+                        // determine position based on pilots array ordering
+                        var idx = pilots.findIndex(function(p){ return p.id === pilotValue; });
+                        if(idx >= 0) position = String(idx + 1);
+                    }
+
+                    if(pilotFull && team) parts.push('Apoyas a ' + pilotFull + ' del equipo ' + team + '.');
+                    else if(pilotFull) parts.push('Apoyas a ' + pilotFull + '.');
+
+                    // Add position/points info when available
+                    if(position || points){
+                        var posText = position ? ('actualmente ocupa la posición ' + position) : '';
+                        var ptsText = points ? ('con ' + points + ' puntos') : '';
+                        var combined = [posText, ptsText].filter(Boolean).join(' ');
+                        if(combined) parts.push(combined + '.');
+                    }
+
+                    var interestMap = {
+                        'resultados': 'resultados y clasificaciones',
+                        'noticias': 'noticias y rumores',
+                        'estadisticas': 'estadísticas y análisis'
+                    };
+                    var interesVal = (form && form.interes && form.interes.value) ? form.interes.value : '';
+                    if(interesVal && interestMap[interesVal]){
+                        parts.push('Recibirás ' + interestMap[interesVal] + ' sobre este piloto.');
+                    }
+
+                    return parts.join(' ');
                 }
 
                 form.addEventListener('submit', function(e){
                     e.preventDefault();
                     var firstInvalid = validateForm();
                     if(firstInvalid){
-                        // Move focus to first invalid control (or fieldset)
-                        firstInvalid.focus();
+                        try{ firstInvalid.focus(); }catch(err){}
                         return;
                     }
                     var selected = form.querySelector('input[name="piloto"]:checked');
-                    var msg = buildMessage(form.nombre.value.trim(), selected && selected.value);
+                    var selectedVal = selected && selected.value;
+                    var msg = buildSubmitMessage(form.nombre.value.trim(), selectedVal);
                     showMessage('Gracias por suscribirte. ' + msg, false);
+                    // Do not show the detailed analysis panel here; keep only the top confirmation message
+                    if(analysisEl){ analysisEl.classList.add('visually-hidden'); analysisEl.textContent = ''; }
                     form.reset();
-                    renderPilots(); // re-render to reset radios (Leclerc default)
+                    renderPilots(); // re-render radios and hide 'otro'
                     attachRadioListeners();
-                    updatePilotAnalysis('leclerc');
                 });
-
-                // Pilot analysis rendering (same as before)
-                function getTeamFromTable(pilotFullName){
-                    if(!pilotFullName) return null; var rows = document.querySelectorAll('.styled-table tbody tr'); for(var i=0;i<rows.length;i++){ var cells = rows[i].querySelectorAll('th, td'); var pilotCell = (cells[1] && cells[1].textContent || '').trim(); var teamCell = (cells[2] && cells[2].textContent || '').trim(); if(pilotCell && pilotCell.toLowerCase().indexOf(pilotFullName.toLowerCase().split(' ')[0]) !== -1){ return teamCell; } } return null; }
 
                 function updatePilotAnalysis(pilotValue){
                     if(!pilotValue){ analysisEl.classList.add('visually-hidden'); return; }
+                    if(pilotValue === 'otro'){
+                        var otherName = (document.getElementById('piloto-otro-text') && document.getElementById('piloto-otro-text').value.trim()) || 'Piloto';
+                        analysisEl.textContent = otherName + ' es un piloto personalizado. No hay estadísticas en la clasificación para este nombre.';
+                        analysisEl.classList.remove('visually-hidden');
+                        return;
+                    }
                     var pilot = findPilotById(pilotValue); var pilotFull = (pilot && pilot.name) || '';
                     var rows = document.querySelectorAll('.styled-table tbody tr'); var position = ''; var points = '';
-                    for(var i=0;i<rows.length;i++){ var cells = rows[i].querySelectorAll('th, td'); var pilotCell = (cells[1] && cells[1].textContent || '').trim(); if(pilotCell && pilotCell.indexOf(pilotFull.split(' ')[0]) !== -1){ position = (cells[0] && cells[0].textContent || '').trim(); points = (cells[3] && cells[3].textContent || '').trim(); break; } }
+                    for(var i=0;i<rows.length;i++){
+                        var cells = rows[i].querySelectorAll('th, td');
+                        var pilotCell = (cells[1] && cells[1].textContent || '').trim();
+                        if(pilotCell && pilotCell.indexOf(pilotFull.split(' ')[0]) !== -1){ position = (cells[0] && cells[0].textContent || '').trim(); points = (cells[3] && cells[3].textContent || '').trim(); break; }
+                    }
                     var text = '';
                     if(pilotFull){ text += pilotFull + ' actualmente ocupa la posición ' + (position || 'N/A') + ' con ' + (points || '0') + ' puntos.'; text += ' Seguimiento: recibirás estadísticas y análisis periódicos sobre su rendimiento.'; }
                     analysisEl.textContent = text; analysisEl.classList.remove('visually-hidden');
                 }
 
-                // Inicializar análisis preseleccionado (Charles Leclerc)
-                updatePilotAnalysis('leclerc');
+                // No inicializar análisis al cargar: esperar a que el usuario seleccione un piloto
             })();
         </script>
 </body>
